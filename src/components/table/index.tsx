@@ -1,53 +1,30 @@
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import { RowProps } from "../../types";
+import { useState } from "react";
+import {
+  Paper,
+  TableRow,
+  TableHead,
+  TableContainer,
+  TableCell,
+  TableBody,
+  Table,
+} from "@mui/material";
 
-const Row = (props: RowProps) => {
-  const rowArray = Object.values(props);
+import { BookingsTableProps } from "../../types";
 
-  return (
-    <TableRow>
-      {rowArray?.map((property, index) => {
-        const renderValue =
-          typeof property === "object"
-            ? Object.values(property).join(" until ")
-            : property.toString(); // case of booking dates
+import Row from "./row";
+import ModalComponent from "../modal";
 
-        return (
-          <TableCell key={`${property}${index}`} align="center">
-            {renderValue}
-          </TableCell>
-        );
-      })}
-    </TableRow>
-  );
-};
+const BookingsTable = ({
+  bookingIds,
+  loading,
+}: BookingsTableProps): JSX.Element => {
+  const headers = ["Booking id", "View", "Edit", "Delete"];
 
-const TopicsTable = (): JSX.Element => {
-  const headers = [
-    "First name",
-    "Last name",
-    "Total price",
-    "Deposit price",
-    "Booking dates",
-    "Additional needs",
-  ];
+  const [openedBookingId, setOpenedBookingId] = useState<number>();
+  const [isModalOpened, setIsModalOpened] = useState(false);
 
-  const row = {
-    firstname: "Samantha",
-    lastname: "Harris",
-    totalprice: 115,
-    depositpaid: true,
-    bookingdates: {
-      checkin: "2022-10-02",
-      checkout: "2022-10-12",
-    },
-    additionalneeds: "null",
+  const handleModal = () => {
+    setIsModalOpened(false);
   };
 
   return (
@@ -55,9 +32,14 @@ const TopicsTable = (): JSX.Element => {
       sx={{ minWidth: 650, display: "flex", justifyContent: "center" }}
       component={Paper}
     >
+      <ModalComponent
+        bookingId={openedBookingId}
+        isModalOpened={isModalOpened}
+        onModalClose={handleModal}
+      />
       <Table sx={{ minWidth: 650, maxWidth: 1250 }} aria-label="simple table">
         <TableHead>
-          <TableRow>
+          <TableRow sx={{ minWidth: 650, maxWidth: 1250 }}>
             {headers.map((header, index) => (
               <TableCell key={`${header}${index}`} align="center">
                 {header}
@@ -66,11 +48,26 @@ const TopicsTable = (): JSX.Element => {
           </TableRow>
         </TableHead>
         <TableBody>
-          <Row {...row} />
+          {!loading &&
+            bookingIds?.map(({ bookingid }) => (
+              <Row
+                key={bookingid}
+                bookingId={bookingid}
+                onEdit={() => {
+                  setOpenedBookingId(bookingid);
+                  setIsModalOpened(true);
+                }}
+              />
+            ))}
+          <TableRow>
+            <TableCell align="center">
+              {loading && "Data is loading..."}
+            </TableCell>
+          </TableRow>
         </TableBody>
       </Table>
     </TableContainer>
   );
 };
 
-export default TopicsTable;
+export default BookingsTable;
