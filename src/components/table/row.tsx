@@ -2,18 +2,23 @@ import { TableRow, TableCell, Button } from "@mui/material";
 
 import { RowProps } from "../../types";
 
-const Row = ({ bookingId, onEdit }: RowProps): JSX.Element => {
+const Row = ({
+  bookingId,
+  onView,
+  onDelete,
+  onEdit,
+}: RowProps): JSX.Element => {
   return (
     <TableRow>
       <TableCell align="center">{bookingId}</TableCell>
       <TableCell align="center">
-        <Button onClick={onEdit}>View</Button>
+        <Button onClick={onView}>View</Button>
       </TableCell>
       <TableCell align="center">
         <Button onClick={onEdit}>Edit</Button>
       </TableCell>
       <TableCell align="center">
-        <Button>Delete</Button>
+        <Button onClick={onDelete}>Delete</Button>
       </TableCell>
     </TableRow>
   );

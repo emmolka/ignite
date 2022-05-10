@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 
 import Table from "../../components/table";
+import PostForm from "../../components/postForm/index";
 import { TableContainer, Paper } from "@mui/material";
 
 const TablePage = (): JSX.Element => {
@@ -38,7 +39,14 @@ const TablePage = (): JSX.Element => {
       }}
       component={Paper}
     >
-      <Table bookingIds={bookingIds} loading={loading} />
+      <PostForm
+        fetchAllBookings={() => fetchBookings()} // refetching after new one has been added
+      />
+      <Table
+        bookingIds={bookingIds}
+        loading={loading}
+        fetchAllBookings={() => fetchBookings()}
+      />
     </TableContainer>
   );
 };
