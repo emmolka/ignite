@@ -1,6 +1,6 @@
 {
-  "short_name": "conductor",
-  "name": "conductor",
+  "short_name": "ignite-data",
+  "name": "ignite-data",
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
