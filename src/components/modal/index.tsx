@@ -2,7 +2,8 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 
-import { updateBooking, getBooking } from "../../queries";
+import { updateBooking } from "../../queries/updateBooking";
+import { getBooking } from "../../queries/getBooking";
 import { BookingData, ModalComponentProps } from "../../types";
 import BookingInfo from "../bookingInfo";
 import Hookform from "../postForm/hookform";

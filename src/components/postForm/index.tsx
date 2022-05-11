@@ -5,7 +5,7 @@ import { Box, Grid, Button, Modal } from "@mui/material";
 import { BookingData } from "../../types";
 import Hookform from "./hookform";
 import boxStyle from "../../utils/boxStyle";
-import { addBooking } from "../../queries";
+import { addBooking } from "../../queries/addBooking";
 
 const PostForm = (): JSX.Element => {
   const [isOpened, setIsOpened] = useState(false);

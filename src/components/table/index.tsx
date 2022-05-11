@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 
 import { BookingsTableProps } from "../../types";
-import { deleteBooking } from "../../queries";
+import { deleteBooking } from "../../queries/deleteBooking";
 
 import Row from "./row";
 import ModalComponent from "../modal";

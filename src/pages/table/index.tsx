@@ -1,7 +1,7 @@
 import Table from "../../components/table";
 import PostForm from "../../components/postForm/index";
 import { TableContainer, Paper } from "@mui/material";
-import { getBookings } from "../../queries";
+import { getBookings } from "../../queries/getBookings";
 
 const TablePage = (): JSX.Element => {
   const { bookingIds = [], loading, error } = getBookings();
