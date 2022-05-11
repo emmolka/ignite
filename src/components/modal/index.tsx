@@ -1,10 +1,8 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 
+import { updateBooking, getBooking } from "../../queries";
 import { BookingData, ModalComponentProps } from "../../types";
 import BookingInfo from "../bookingInfo";
 import Hookform from "../postForm/hookform";
@@ -16,57 +14,13 @@ const ModalComponent = ({
   onModalClose,
   viewOnlyMode,
 }: ModalComponentProps): JSX.Element => {
-  const [bookingData, setBookingData] = useState<BookingData>();
-  const [loading, setLoading] = useState(false);
+  const { bookingData, loading } = getBooking(bookingId);
+  const { mutate: updateMutation, isLoading } = updateBooking();
 
-  const fetchBookingData = async (bookingIdInner: number) => {
-    try {
-      setLoading(true);
-      const { data } = await axios.get<BookingData>(
-        `https://thingproxy.freeboard.io/fetch/https://restful-booker.herokuapp.com/booking/${bookingIdInner}`, // CORS proxy
-        {
-          headers: {
-            Accept: "application/json", // api returns teapot without this param
-          },
-        }
-      );
-      setBookingData(data);
-    } catch (e) {
-      alert(e);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const updateBookingHandler = (bookingData: BookingData) =>
+    bookingId && updateMutation({ bookingData, bookingId });
 
-  const updateBooking = async (bookingData: BookingData, bookingId: number) => {
-    try {
-      setLoading(true);
-      const { data } = await axios.patch<BookingData>(
-        `https://thingproxy.freeboard.io/fetch/https://restful-booker.herokuapp.com/booking/${bookingId}`, // CORS proxy
-        {
-          ...bookingData,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Basic YWRtaW46cGFzc3dvcmQxMjM=", // Strange API :D
-            Accept: "application/json",
-          },
-        }
-      );
-      setBookingData(data);
-    } catch (e) {
-      alert(e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    bookingId && fetchBookingData(bookingId);
-  }, [bookingId]);
-
-  const isReadyToRender = !loading && bookingData;
+  const isReadyToRender = !loading && !isLoading && bookingData;
 
   return (
     <Modal open={isModalOpened} onClose={onModalClose}>
@@ -78,14 +32,12 @@ const ModalComponent = ({
           isReadyToRender && (
             <Hookform
               {...bookingData}
-              bookingHandler={(bookingData) =>
-                bookingId && updateBooking(bookingData, bookingId)
-              }
+              bookingHandler={updateBookingHandler}
               editMode
             />
           )
         )}
-        {loading && "Loading booking data"}
+        {(loading || isLoading) && "Loading booking data"}
       </Box>
     </Modal>
   );

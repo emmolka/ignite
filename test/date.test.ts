@@ -5,7 +5,6 @@ describe("dateFormat test: ", () => {
     const regexp = new RegExp(dateFormat);
 
     const returnedValue = regexp.test("1999-09-01");
-    console.log(returnedValue);
 
     expect(returnedValue).toBe(true);
   });
@@ -13,7 +12,6 @@ describe("dateFormat test: ", () => {
     const regexp = new RegExp(dateFormat);
 
     const returnedValue = regexp.test("1999-99-01");
-    console.log(returnedValue);
 
     expect(returnedValue).toBe(false);
   });

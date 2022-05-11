@@ -10,17 +10,18 @@ import {
 } from "@mui/material";
 
 import { BookingsTableProps } from "../../types";
+import { deleteBooking } from "../../queries";
 
 import Row from "./row";
 import ModalComponent from "../modal";
-import axios from "axios";
 
 const BookingsTable = ({
   bookingIds,
   loading,
-  fetchAllBookings,
 }: BookingsTableProps): JSX.Element => {
   const headers = ["Booking id", "View", "Edit", "Delete"];
+
+  const { mutate: deleteMutation } = deleteBooking();
 
   const [openedBookingId, setOpenedBookingId] = useState<number>();
   const [isModalOpened, setIsModalOpened] = useState(false);
@@ -31,34 +32,19 @@ const BookingsTable = ({
     setIsModalOpened(false);
   };
 
-  const deleteBooking = async (bookingId: number) => {
-    try {
-      await axios.delete(
-        `https://thingproxy.freeboard.io/fetch/https://restful-booker.herokuapp.com/booking/${bookingId}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Basic YWRtaW46cGFzc3dvcmQxMjM=", // Strange API :D
-          },
-        }
-      );
-      fetchAllBookings();
-    } catch (e) {
-      alert(e);
-    }
-  };
-
   return (
     <TableContainer
       sx={{ minWidth: 650, display: "flex", justifyContent: "center" }}
       component={Paper}
     >
-      <ModalComponent
-        bookingId={openedBookingId}
-        isModalOpened={isModalOpened}
-        onModalClose={handleModalClose}
-        viewOnlyMode={isViewOnly}
-      />
+      {openedBookingId && (
+        <ModalComponent
+          bookingId={openedBookingId}
+          isModalOpened={isModalOpened}
+          onModalClose={handleModalClose}
+          viewOnlyMode={isViewOnly}
+        />
+      )}
       <Table sx={{ minWidth: 650, maxWidth: 1250 }} aria-label="simple table">
         <TableHead>
           <TableRow sx={{ minWidth: 650, maxWidth: 1250 }}>
@@ -81,7 +67,7 @@ const BookingsTable = ({
                   setIsModalOpened(true);
                 }}
                 onDelete={() => {
-                  deleteBooking(bookingid);
+                  deleteMutation(bookingid);
                 }}
                 onEdit={() => {
                   setOpenedBookingId(bookingid);
