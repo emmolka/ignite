@@ -40,7 +40,7 @@ export const updateBooking = (): {
         },
       }
     );
-    queryClient.invalidateQueries(`${bookingId}`);
+    await queryClient.invalidateQueries(`${bookingId}`);
   };
 
   const { mutate, isLoading } = useMutation(updateBookingHandler, {

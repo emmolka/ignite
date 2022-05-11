@@ -15,13 +15,15 @@ const ModalComponent = ({
   onModalClose,
   viewOnlyMode,
 }: ModalComponentProps): JSX.Element => {
-  const { bookingData, loading } = getBooking(bookingId);
-  const { mutate: updateMutation, isLoading } = updateBooking();
+  const { bookingData, loading: bookingDataLoading } = getBooking(bookingId);
+  const { mutate: updateMutation, isLoading: updateMutationLoading } =
+    updateBooking();
 
   const updateBookingHandler = (bookingData: BookingData) =>
     bookingId && updateMutation({ bookingData, bookingId });
 
-  const isReadyToRender = !loading && !isLoading && bookingData;
+  const isReadyToRender =
+    !bookingDataLoading && !updateMutationLoading && bookingData;
 
   return (
     <Modal open={isModalOpened} onClose={onModalClose}>
@@ -38,7 +40,8 @@ const ModalComponent = ({
             />
           )
         )}
-        {(loading || isLoading) && "Loading booking data"}
+        {(bookingDataLoading || updateMutationLoading) &&
+          "Loading booking data"}
       </Box>
     </Modal>
   );
