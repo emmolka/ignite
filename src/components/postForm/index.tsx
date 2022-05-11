@@ -17,6 +17,7 @@ const PostForm = ({
   const onClose = () => {
     setIsOpened(false);
   };
+
   const newBookingHandler = async (bookingData: BookingData) => {
     try {
       await axios.post(

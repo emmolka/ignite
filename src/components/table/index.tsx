@@ -26,7 +26,7 @@ const BookingsTable = ({
   const [isModalOpened, setIsModalOpened] = useState(false);
   const [isViewOnly, setIsViewOnly] = useState(false);
 
-  const handleModal = () => {
+  const handleModalClose = () => {
     setIsViewOnly(false);
     setIsModalOpened(false);
   };
@@ -56,7 +56,7 @@ const BookingsTable = ({
       <ModalComponent
         bookingId={openedBookingId}
         isModalOpened={isModalOpened}
-        onModalClose={handleModal}
+        onModalClose={handleModalClose}
         viewOnlyMode={isViewOnly}
       />
       <Table sx={{ minWidth: 650, maxWidth: 1250 }} aria-label="simple table">
