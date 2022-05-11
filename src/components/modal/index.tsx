@@ -19,11 +19,11 @@ const ModalComponent = ({
   const [bookingData, setBookingData] = useState<BookingData>();
   const [loading, setLoading] = useState(false);
 
-  const fetchBookingData = async () => {
+  const fetchBookingData = async (bookingIdInner: number) => {
     try {
       setLoading(true);
       const { data } = await axios.get<BookingData>(
-        `https://thingproxy.freeboard.io/fetch/https://restful-booker.herokuapp.com/booking/${bookingId}`, // CORS proxy
+        `https://thingproxy.freeboard.io/fetch/https://restful-booker.herokuapp.com/booking/${bookingIdInner}`, // CORS proxy
         {
           headers: {
             Accept: "application/json", // api returns teapot without this param
@@ -63,23 +63,27 @@ const ModalComponent = ({
   };
 
   useEffect(() => {
-    bookingId && fetchBookingData();
+    bookingId && fetchBookingData(bookingId);
   }, [bookingId]);
+
+  const isReadyToRender = !loading && bookingData;
 
   return (
     <Modal open={isModalOpened} onClose={onModalClose}>
       <Box sx={boxStyle}>
         <Typography fontSize="20px">Booking id: {bookingId}</Typography>
-        {!loading && bookingData && viewOnlyMode ? (
+        {isReadyToRender && viewOnlyMode ? (
           <BookingInfo {...bookingData} />
         ) : (
-          <Hookform
-            {...bookingData}
-            bookingHandler={(bookingData) =>
-              bookingId && updateBooking(bookingData, bookingId)
-            }
-            editMode
-          />
+          isReadyToRender && (
+            <Hookform
+              {...bookingData}
+              bookingHandler={(bookingData) =>
+                bookingId && updateBooking(bookingData, bookingId)
+              }
+              editMode
+            />
+          )
         )}
         {loading && "Loading booking data"}
       </Box>
