@@ -1,11 +1,43 @@
-Coding challenge - ID
+## Coding challenge - ID
 
-Hi !
+### Run locally
 
-To run the code run: npm start
-To build the code: npm build
-To run tests: npm run test
+Clone the project
 
-If you want to use docker to run, use:
-docker build -t react-image .  
-docker run --rm -p 3000:3000 react-image
+```bash
+  git@github.com:emmolka/ignite.git
+```
+
+Go to the project directory
+
+```bash
+  cd /ignite
+```
+
+Install dependencies
+
+```bash
+  npm install
+```
+
+Start the server
+
+```bash
+  npm run start
+```
+
+### Run tests
+
+```bash
+  npm run test
+```
+
+### Run using docker
+
+```bash
+  docker build -t react-image .
+```
+
+```bash
+  docker run --rm -p 3000:3000 react-image
+```

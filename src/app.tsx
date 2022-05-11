@@ -1,7 +1,12 @@
-import TablePage from "./pages/table";
+import { QueryClient, QueryClientProvider } from "react-query";
 
-const App = (): JSX.Element => {
-  return <TablePage />;
-};
+import TablePage from "./pages/table";
+const queryClient = new QueryClient();
+
+const App = (): JSX.Element => (
+  <QueryClientProvider client={queryClient}>
+    <TablePage />
+  </QueryClientProvider>
+);
 
 export default App;

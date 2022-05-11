@@ -8,7 +8,6 @@ export interface RowProps {
 export interface BookingsTableProps {
   bookingIds: { bookingid: number }[];
   loading: boolean;
-  fetchAllBookings: () => void;
 }
 
 export interface BookingData {
@@ -24,7 +23,7 @@ export interface BookingData {
 }
 
 export interface ModalComponentProps {
-  bookingId?: number;
+  bookingId: number;
   isModalOpened: boolean;
   onModalClose: () => void;
   viewOnlyMode?: boolean;

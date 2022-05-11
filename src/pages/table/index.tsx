@@ -1,32 +1,12 @@
-import axios from "axios";
-import { useState, useEffect } from "react";
-
 import Table from "../../components/table";
 import PostForm from "../../components/postForm/index";
 import { TableContainer, Paper } from "@mui/material";
+import { getBookings } from "../../queries/getBookings";
 
 const TablePage = (): JSX.Element => {
-  const [bookingIds, setBookingIds] = useState<{ bookingid: number }[]>([]);
-  const [loading, setLoading] = useState(false);
+  const { bookingIds = [], loading, error } = getBookings();
 
-  const fetchBookings = async () => {
-    setLoading(true);
-    try {
-      const { data } = await axios.get<{ bookingid: number }[]>(
-        "https://thingproxy.freeboard.io/fetch/https://restful-booker.herokuapp.com/booking" // CORS proxy
-      );
-
-      setBookingIds(data.splice(0, 50));
-    } catch (e) {
-      alert(e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchBookings();
-  }, []);
+  if (error) return <p>An error has occurred</p>;
 
   return (
     <TableContainer
@@ -39,14 +19,8 @@ const TablePage = (): JSX.Element => {
       }}
       component={Paper}
     >
-      <PostForm
-        fetchAllBookings={() => fetchBookings()} // refetching after new one has been added
-      />
-      <Table
-        bookingIds={bookingIds}
-        loading={loading}
-        fetchAllBookings={() => fetchBookings()}
-      />
+      <PostForm />
+      <Table bookingIds={bookingIds} loading={loading} />
     </TableContainer>
   );
 };
